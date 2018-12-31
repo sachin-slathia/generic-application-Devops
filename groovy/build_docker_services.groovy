@@ -9,3 +9,4 @@ def build(String repo, String username, String password, String branch4tagging) 
       docker login -u '$username' -p '$password' '$repo'
       """
 }
+return this
