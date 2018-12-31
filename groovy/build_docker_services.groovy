@@ -7,7 +7,7 @@ def build(String repo, String username, String password, String branch4tagging) 
   tag = "$branch4tagging-$shortCommit"
   sh """
       set -v
-      docker login -u '$username' -p '$password' '$repo'
+      docker login -u '$username' -p '$password'
       """
 }
 return this
