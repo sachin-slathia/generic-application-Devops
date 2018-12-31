@@ -8,6 +8,9 @@ def build(String repo, String username, String password, String branch4tagging) 
   sh """
       set -v
       docker login -u '$username' -p '$password'
+      docker build -t play:'$tag' 
+      docker tag play:'$tag' slathia15/play:'$tag'
+      docker push slathia15/play:'$tag'
       """
 }
 return this
