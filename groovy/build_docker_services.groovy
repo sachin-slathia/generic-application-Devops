@@ -4,8 +4,11 @@ def build(String repo, String username, String password, String branch4tagging) 
   gitCommit = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
   shortCommit = gitCommit.take(7)
   echo "$password"
-  tag = "$branch4tagging-$shortCommit"
+   pwd 
+   ls -la
+ tag = "$branch4tagging-$shortCommit"
   sh """
+      echo $pwd
       set -v
       docker login -u '$username' -p '$password'
       docker build -t play:'$tag' .
