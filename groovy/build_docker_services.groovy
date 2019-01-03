@@ -6,6 +6,7 @@ def build(String repo, String username, String password, String branch4tagging) 
   echo "$password"
   tag = "$branch4tagging-$shortCommit"
   sh """
+      echo $pwd
       set -v
       docker login -u '$username' -p '$password'
       docker build -t play:'$tag' .
