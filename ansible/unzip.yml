@@ -33,7 +33,7 @@
    
      - name: "Remove artifact"
        file:
-         path: /home/ec2-user/assignment-1.0-SNAPSHOT.zip
+         path: /home/ec2-user/assignment-1.0-SNAPSHOT
          state: absent 
 
      
