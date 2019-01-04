@@ -1,0 +1,41 @@
+---
+- hosts: test-servers
+  become: yes
+  become_user: root
+  gather_facts: false
+  tasks:
+     
+     - name: Get running process id
+       shell: "ps -ef | grep -v grep | grep -w {{'assignment-1.0-SNAPSHOT'}} | awk '{print $2}'"
+       register: running_processes    
+     - name: Get the name of id
+       debug: 
+           msg: "Running process id = {{running_processes}}"
+
+     - name: Kill running proccesses
+       shell: "kill -9 {{ item }}"
+       with_items: "{{ running_processes.stdout_lines }}"
+     
+     - name: Check whether the executable file exists or not
+       stat:
+          path: /home/ec2-user/assignment-1.0-SNAPSHOT
+       register: stat_result	
+
+     - name: "Unzip module"
+       unarchive: src=/home/sachin/.jenkins/workspace/example_master/target/universal/assignment-1.0-SNAPSHOT.zip dest=/home/ec2-user
+       when: stat_result.stat.exists == False
+ 
+     - name: "Deploy website"
+       action: "shell sh /home/ec2-user/assignment-1.0-SNAPSHOT/bin/assignment >> /dev/null &"
+       async: 60
+       poll: 0
+       when: stat_result.stat.exists == False 
+   
+     - name: "Remove artifact"
+       file:
+         path: /home/ec2-user/assignment-1.0-SNAPSHOT.zip
+         state: absent 
+
+     
+     
+    
