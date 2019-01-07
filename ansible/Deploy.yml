@@ -1,0 +1,27 @@
+
+---
+- hosts: test-servers
+  become: yes
+  become_user: root
+  gather_facts: false
+  tasks:
+     - name: Get running process id
+       shell: docker ps | awk '{print $1}' |awk 'FNR == 2 {print}'
+       register: running_processes    
+
+     - name: Get the name of id
+       debug: 
+           msg: "Running process id = {{running_processes}}"
+
+     - name: Kill running proccesses
+       shell: "docker kill {{ item }}"
+       with_items: "{{ running_processes.stdout_lines }}" 
+
+
+     - name: Deploy a website
+       command: docker run -d -p 9000:9000 slathia15/play:latest
+       register: mymotd
+ 
+       
+       
+      
